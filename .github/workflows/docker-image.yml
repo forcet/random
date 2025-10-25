@@ -88,4 +88,6 @@ jobs:
         run: |
           oc project forcet22-dev
           oc apply -f openshift/config/deployment.yml
+          oc apply -f openshift/config/service.yml
+          oc apply -f openshift/config/metrics.yml
           oc rollout status deployment/forcet-lucky-deployment
