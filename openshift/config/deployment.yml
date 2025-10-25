@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: forcet-lucky-deployment
+  namespace: forcet22-dev
+  labels:
+    app: forcet-lucky-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: forcet-lucky-app
+  template:
+    metadata:
+      labels:
+        app: forcet-lucky-app
+    spec:
+      containers:
+        - name: forcet-lucky
+          image: forcet22/random-lucky:build-{{ tag }}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "800Mi"
+            limits:
+              cpu: "1000m"
+              memory: "1500Mi"
