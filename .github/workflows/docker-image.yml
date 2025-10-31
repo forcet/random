@@ -90,5 +90,5 @@ jobs:
           cat helm/values.yml
       - name: Deploy files
         run: |
-          helm show chart oci://registry-1.docker.io/${{ secrets.DOCKER_USERNAME  }}/helm-data --version 10
-          helm upgrade --install forcet-lucky-node oci://registry-1.docker.io/${{ secrets.DOCKER_USERNAME  }}/helm-data --version 10 --values helm/values.yml
+          helm show chart oci://registry-1.docker.io/${{ secrets.DOCKER_USERNAME  }}/helm-data --version 11
+          helm upgrade --install forcet-lucky-node oci://registry-1.docker.io/${{ secrets.DOCKER_USERNAME  }}/helm-data --version 11 --values helm/values.yml
