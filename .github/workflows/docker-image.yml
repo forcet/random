@@ -53,6 +53,10 @@ jobs:
           curl -L https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz | tar xz
           sudo mv oc /usr/local/bin/
           oc version
+      - name: Install Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: v3.12.0
       - name: Verificar secreto OPENSHIFT_TOKEN sin exponerlo
         env:
           OPENSHIFT_TOKEN: ${{ secrets.OPENSHIFT_TOKEN }}
@@ -82,12 +86,9 @@ jobs:
       - name: Update Deployment tag
         run: |
           echo "Reemplazando {{ tag }} con ${{ github.run_number }}"
-          sed -i "s|{{ tag }}|${{ github.run_number }}|g" openshift/config/deployment.yml
-          cat openshift/config/deployment.yml
+          sed -i "s|{{ tag }}|${{ github.run_number }}|g"  helm/values.yml
+          cat helm/values.yml
       - name: Deploy files
         run: |
-          oc project forcet22-dev
-          oc apply -f openshift/config/deployment.yml
-          oc apply -f openshift/config/service.yml
-          oc apply -f openshift/config/metrics.yml
-          oc rollout status deployment/forcet-lucky-deployment
+          helm show chart oci://registry-1.docker.io/${{ secrets.DOCKER_USERNAME  }}/helm-data --version 10
+          helm upgrade --install forcet-lucky-node oci://registry-1.docker.io/${{ secrets.DOCKER_USERNAME  }}/helm-data --version 10 --values helm/values.yml
